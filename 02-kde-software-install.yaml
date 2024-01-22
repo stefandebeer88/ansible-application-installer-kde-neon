@@ -1,0 +1,31 @@
+---
+- hosts: localhost
+  become: yes
+  tasks:
+    - name: Update packages
+      apt:
+        update_cache: yes
+      register: apt_update_result
+      failed_when: apt_update_result is failed
+
+    - name: Upgrade packages
+      apt:
+        upgrade: yes
+      register: apt_upgrade_result
+      failed_when: apt_upgrade_result is failed
+
+    - name: Install software packages
+      apt:
+        name:
+          - thunderbird
+          - gimp
+          - inkscape
+          - keepassxc
+          - filezilla
+        state: present
+      register: apt_install_result
+      failed_when: apt_install_result is failed
+
+    - name: Run 03-reboot.sh script
+      shell: /home/snow/Desktop/03-reboot.sh
+
